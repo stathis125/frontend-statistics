@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Header,
   Title,
@@ -10,16 +10,17 @@ import ActionsIcon from 'grommet/components/icons/base/Actions';
 
 const AppHeader = () => {
   return (
-    <Header fixed={true}>
+    <Header fixed>
       <Title>
         Sample Title 2
       </Title>
-      <Box flex={true}
+      <Box
+        flex
         justify='end'
         direction='row'
         responsive={false}>
         <Menu icon={<ActionsIcon />}
-          dropAlign={{ "right": "right" }}>
+          dropAlign={{ 'right': "right" }}>
           <Anchor href='#'
             className='active'>
             First
