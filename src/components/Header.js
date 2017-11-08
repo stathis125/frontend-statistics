@@ -2,39 +2,29 @@ import React from 'react';
 import {
   Header,
   Title,
-  Box,
-  Anchor,
-  Menu
+  Search,
+  Box
 } from 'grommet';
-import ActionsIcon from 'grommet/components/icons/base/Actions';
 
-const AppHeader = () => {
-  return (
-    <Header fixed>
-      <Title>
-        Sample Title 2
-      </Title>
+const AppHeader = () =>
+  (
+    <Box
+      align='center'>
+      <Header>
+        <Title>
+          Sample Title 2
+        </Title>
+
+      </Header>
       <Box
-        flex
-        justify='end'
-        direction='row'
-        responsive={false}>
-        <Menu icon={<ActionsIcon />}
-          dropAlign={{ 'right': "right" }}>
-          <Anchor href='#'
-            className='active'>
-            First
-          </Anchor>
-          <Anchor href='#'>
-            Second
-          </Anchor>
-          <Anchor href='#'>
-            Third
-          </Anchor>
-        </Menu>
+        size='large'>
+        <Search
+          placeHolder='Search Employee'
+          inline
+          fill />
       </Box>
-    </Header>
+    </Box>
   );
-};
+
 
 export default AppHeader;
