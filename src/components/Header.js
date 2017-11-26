@@ -6,12 +6,7 @@ import {
   Box
 } from 'grommet';
 
-const filterEmployees = (event) => {
-  console.log(event.target.value);
-  
-};
-
-const AppHeader = () => (
+const AppHeader = ({filterEmployees}) => (
   <Box
     align='center'>
     <Header>
