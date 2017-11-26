@@ -7,26 +7,28 @@ import {
 } from 'grommet';
 import 'grommet/grommet.min.css';
 
-const EmployeeCard = ({name}) => (
+const EmployeeCard = ({ name }) => (
   <Box>
     <Card
       thumbnail='http://grommet.io/img/carousel-1.png'
       label={name}
       heading='Something else'
-      description='Sample description providing more details.'
+      description='Sample xysopsolia providing more details.'
       link={<Anchor
         href='#'
         label='edit' />}
     />
   </Box>
 );
-const namesArray = ['poutsa', 'peos', 'falos', 'mitsos', 'tsoutsouna'];
-const Employee = () => (
+
+const EmployeesList = ({ employees }) => (
   <Box pad='large'>
     <Columns>
-      {namesArray.map((name, i) => <EmployeeCard key={`${i}_${name}`} name={name} />)}
+      {employees.map((employee, i) =>
+        <EmployeeCard key={`${i}_${employee.name}`} name={employee.name} />)
+      }
     </Columns>
   </Box>
 );
 
-export default Employee;
+export default EmployeesList;
