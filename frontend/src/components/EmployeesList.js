@@ -12,7 +12,7 @@ const EmployeeCard = ({ name }) => (
     <Card
       thumbnail='http://grommet.io/img/carousel-1.png'
       label={name}
-      heading='Something else'
+      heading={name}
       description='Sample xysopsolia providing more details.'
       link={<Anchor
         href='#'
