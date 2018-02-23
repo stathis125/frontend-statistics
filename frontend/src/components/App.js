@@ -4,27 +4,29 @@ import { lowerCase } from 'lodash';
 import 'grommet/grommet.min.css';
 import EmployeesList from './EmployeesList';
 import Header from './Header';
-
 import { fetchEmployees } from '../lib/httpClient';
 
+let initialList = [];
 class App extends Component {
   constructor(props) {
     super(props);
     this.filterEmployees = this.filterEmployees.bind(this);
-    this.state = { };
+    this.state = {};
   }
   componentDidMount() {
-    fetchEmployees().then(response => { 
+    fetchEmployees().then(response => {
+      initialList = response.data;
       this.setState({ employees: response.data });
     })
+    .catch(console.error);
   }
 
   filterEmployees(event) {
     const query = event.target.value;
-    this.setState({
-      employees: this.state.employees.filter(employee =>
-        lowerCase(employee.name).includes(lowerCase(query)))
-    });
+    const filteredEmployees = initialList.filter(employee =>
+      lowerCase(employee.name).includes(lowerCase(query)))
+
+    this.setState({employees: filteredEmployees });
   }
   render() {
     return (
@@ -37,3 +39,4 @@ class App extends Component {
 }
 
 export default App;
+
