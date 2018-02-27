@@ -18,7 +18,8 @@
     "bluebird": "^3.5.1",
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
-    "mongoose": "^4.11.4"
+    "mongoose": "^4.11.4",
+    "react-router-dom": "^4.2.2"
   },
   "devDependencies": {
     "concurrently": "^3.5.1",

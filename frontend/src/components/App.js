@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import Grommet from 'grommet';
 import { lowerCase } from 'lodash';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import 'grommet/grommet.min.css';
 import EmployeesList from './EmployeesList';
 import Header from './Header';
 import { fetchEmployees } from '../lib/httpClient';
 
 let initialList = [];
-class App extends Component {
+class Home extends Component {
   constructor(props) {
     super(props);
     this.filterEmployees = this.filterEmployees.bind(this);
@@ -37,6 +38,20 @@ class App extends Component {
     );
   }
 }
+const skata = () => (
+  <div>
+    skata
+  </div>
+)
+
+const App = () => (
+  <BrowserRouter>
+    <Switch>
+      <Route exact path="/" component={Home}/>
+      <Route path="/skata" component={skata}/>
+    </Switch>
+  </BrowserRouter>
+)
 
 export default App;
 
