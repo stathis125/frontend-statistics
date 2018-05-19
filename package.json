@@ -5,8 +5,9 @@
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "node ./api/app.js",
+    "dev-server": "nodemon ./api/app.js",
     "client": "node start-client.js",
-    "dev": "npm run start",
+    "dev": "concurrently \"npm run dev-server\" \"npm run client\"",
     "lint": "eslint .",
     "postinstall": "cd frontend && npm install"
   },

@@ -1,10 +1,11 @@
 const Employee = require('../models/employee');
 
 function putUpdateEmployee(req, res) {
-    const employeeId = req.params.employee_id;
+    const employeeId = req.params.id;
     Employee.findByIdAndUpdate(employeeId, {
         name: req.body.name,
-        quantity: req.body.quantity
+        age: req.body.age,
+        job: req.body.job
     })
         .then(employee => {
             res.json(employee);

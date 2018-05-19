@@ -1,7 +1,7 @@
 const Employee = require('../models/employee');
 
 function deleteEmployeeById(req, res) {
-    const employeeId = req.params.employee_id;
+    const employeeId = req.params.id;
     Employee.findByIdAndRemove(employeeId)
         .then(employee => {
             res.json(employee);

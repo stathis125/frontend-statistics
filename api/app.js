@@ -13,9 +13,9 @@ mongoose.Promise = require('bluebird');
 
 mongoose.connect('mongodb://localhost:27017/statistics');
 app.get('/api', routeHandlers.getAllEmployeesHandler);
-app.get('/api:employee_id', routeHandlers.getEmployeeById);
-app.put('/api:employee_id', routeHandlers.putUpdateEmployee);
-app.delete('/api:employee_id', routeHandlers.deleteEmployeeById);
+app.get('/api/:id', routeHandlers.getEmployeeById);
+app.put('/api/:id', routeHandlers.putUpdateEmployee);
+app.delete('/api/:id', routeHandlers.deleteEmployeeById);
 app.post('/api', routeHandlers.postCreateEmployee);
 app.listen(port, () => {
     console.log('Example app listening on port ', port);
