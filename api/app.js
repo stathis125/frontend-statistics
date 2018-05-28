@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 mongoose.Promise = require('bluebird');
 
-mongoose.connect('mongodb://localhost:27017/statistics');
+mongoose.connect(process.env.MONGO_URI);
 app.get('/api', routeHandlers.getAllEmployeesHandler);
 app.get('/api/:id', routeHandlers.getEmployeeById);
 app.put('/api/:id', routeHandlers.putUpdateEmployee);
