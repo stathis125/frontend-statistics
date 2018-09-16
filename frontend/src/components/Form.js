@@ -1,153 +1,172 @@
-import React, { Component } from 'react';
-import {isEmpty} from 'lodash';
-import Grommet from 'grommet'
-import CloseIcon from 'grommet/components/icons/base/Close';
+import React from 'react';
+import {
+	App,
+	Box,
+	Button,
+	Footer,
+	Form,
+	FormField,
+	FormFields,
+	Header,
+	Heading
+} from 'grommet'
+import {pathOr} from 'ramda';
+import * as Yup from 'yup';
+import {withStateHandlers, compose, withProps, lifecycle} from 'recompose';
+import {or, isEmpty} from 'ramda';
+import {withFormik} from 'formik';
+import LinkPreviousIcon from 'grommet/components/icons/base/LinkPrevious';
+import SubmitFooter from './SubmitFooter'
 import {createEmployee, fetchEmployee, updateEmployee} from '../lib/httpClient.js'
 
-const Form = ({
-	handleSubmit,
-	handleChange,
-	hide,
-	name='',
-	age='',
-	job='',
-	isEditPage,
-	goBack
-}) => (
-	<Grommet.Box
-	align='center'>
-		<Grommet.Toast style={{display: hide && "none"}} status="ok">
-			Successfully created
-		</Grommet.Toast>
-		<Grommet.Form onSubmit={handleSubmit}>
-			<Grommet.Header flex justify="between">
-				<Grommet.Heading>
-					{isEditPage ? 'Edit' : 'Create'}
-				</Grommet.Heading>
-				<Grommet.Box>
-					<Grommet.Button
-						icon={<CloseIcon />}
-						onClick={goBack}
-					/>
-				</Grommet.Box>
-			</Grommet.Header>
-			<Grommet.FormFields>
-				<Grommet.FormField label='Employee name'>
-					<Grommet.TextInput
-						onDOMChange={handleChange}
-						name="name"
-						value={name}
-						required
-						type="text"
-					placeHolder="Joe Doe"/>
-				</Grommet.FormField>
+const Schema = Yup.object().shape({
+	name: Yup.string()
+	.min(2, 'Must be longer than 2 characters')
+	.required('Required'),
+	job: Yup.string()
+	.min(2, 'Too short')
+	.required('Required'),
+	avatar: Yup.string()
+	.url('Invalid url'),
+	age: Yup.number().min(0, 'Must be greater than 0').required('Required')
+});
 
-				<Grommet.FormField label='Profession'>
-					<Grommet.TextInput
-						onDOMChange={handleChange}
-						name="job"
-						value={job}
-						required
-						type="text"
-					placeHolder="Developer"/>
-				</Grommet.FormField>
+const MyForm = props => (
+	<Box
+		align='center'>
+	<Form onSubmit={props.handleSubmit}>
+		<Header flex direction="row">
+			<Button
+				icon={<LinkPreviousIcon/>}
+				onClick={() => props.history.push('/')}
+			/>
+			<Heading>
+				Create
+			</Heading>
+		</Header>
+		<FormFields>
 
-				<Grommet.FormField label='Age'>
-					<Grommet.NumberInput
-						onChange={handleChange}
-						name="age"
-						required
-						value={age}
-						type="number"
-						min={0}
-					placeholder="30"/>
-				</Grommet.FormField>
-
-			</Grommet.FormFields>
-			<Grommet.Footer pad={{"vertical": "medium"}}>
-				<Grommet.Button
-					label='Submit'
-					type={'submit'}
-					primary={true}
+			<FormField error={props.nameError} label='Employee name'>
+				<input
+					onChange={props.handleChange}
+					name="name"
+					value={props.values.name}
+					required
+					type="text"
+					placeholder="Employee name"
 				/>
-			</Grommet.Footer>
-		</Grommet.Form>
-	</Grommet.Box>
+			</FormField>
+
+			<FormField error={props.jobError} label='Profession'>
+				<input
+					onChange={props.handleChange}
+					name="job"
+					value={props.values.job}
+					required
+					type="text"
+					placeholder="Job title"
+				/>
+			</FormField>
+
+			<FormField error={props.ageError} label='Age'>
+				<input
+					onChange={props.handleChange}
+					name="age"
+					required
+					value={props.values.age}
+					type="number"
+					min={0}
+					placeholder="30"
+				/>
+			</FormField>
+
+			<FormField style={{marginTop: '1.6rem'}} error={props.avatarError} label='Image'>
+				<input
+					onChange={props.handleChange}
+					name="avatar"
+					value={props.values.avatar}
+					type="url"
+					placeholder="Url of an image"
+				/>
+			</FormField>
+
+			<FormField error={props.descriptionError} label='Description'>
+				<textarea
+					onChange={props.handleChange}
+					name="description"
+					value={props.values.description}
+					type="text"
+					min={0}
+					max={100}
+					placeholder="Optional description..."
+				/>
+			</FormField>
+
+		</FormFields>
+		<SubmitFooter
+			isSubmitting={props.isSubmitting}
+			hasErrors={!isEmpty(props.errors)}
+			status={props.status}
+			failText="Something went wrong"
+		/>
+	</Form>
+</Box>
 )
 
-class FormContainer extends Component {
-	constructor() {
-		super()
-
-		this.handleChange = this.handleChange.bind(this)
-		this.handleSubmit = this.handleSubmit.bind(this)
-
-		this.state = {
-			name: '',
-			job: '',
-			age: '',
-			hide: true,
-			isEditPage: false,
-			isSubmitDisabled: true,
-			id: null
+const formEnhancer = withFormik({
+	enableReinitialize: true,
+	mapPropsToValues: props => ({
+		name: props.name || '',
+		age: props.age || '',
+		job: props.job || '',
+		avatar: props.avatar || '',
+		description: props.description || ''
+	}),
+	validationSchema: Schema,
+	handleSubmit: async (values, { props, setStatus, setSubmitting }) => {
+		try {
+			if (props.match.params.id) {
+				await updateEmployee(props.match.params.id, values)
+				setStatus({success: true})
+			} else {
+				await createEmployee(values)
+				setStatus({success: true})
+			}
+		} catch (e) {
+			console.error(e);
+			setStatus({success: false})
 		}
+		setSubmitting(false);
 	}
+})
 
-	async componentDidMount() {
-		if (this.props.match.params.id) {
-			const employee = await fetchEmployee(this.props.match.params.id)
+const BasicForm = props => (
+	<App style={{paddingTop: 40}}>
+		<MyForm {...props}/>
+	</App>
+);
 
-			this.setState({
-				name: employee.data.name,
-				job: employee.data.job,
-				age: employee.data.age,
-				isEditPage: true,
-				id: this.props.match.params.id
-			})
+export default compose(
+	withStateHandlers(null, {
+		onData: state => data => data
+	}),
+	lifecycle({
+		async componentDidMount() {
+			if (this.props.match.params.id) {
+				const employee = await fetchEmployee(this.props.match.params.id)
+				this.props.onData(employee.data)
+			}
 		}
-	}
-	handleSubmit(e) {
-		e.preventDefault()
-
-		if (this.state.isEditPage) {
-			updateEmployee(this.state)
-			.then(() => {
-				this.setState({hide: false})
-				setTimeout(() => this.props.history.push('/'), 2000)
-			})
-			.catch(console.error)
-		} else {
-			createEmployee(this.state)
-			.then(() => {
-				this.setState({hide: false})
-				setTimeout(() => this.props.history.push('/'), 2000)
-			})
-			.catch(console.error)
-		}
-	}
-
-	handleChange(e) {
-		this.setState({[e.target.name]: e.target.value})
-	}
-
-
-	render() {
-
-		return (
-			<Grommet.App style={{paddingTop: 40}}>
-				<Form
-					handleChange={this.handleChange}
-					handleSubmit={this.handleSubmit}
-					hide={this.state.hide}
-					name={this.state.name}
-					job={this.state.job}
-					age={this.state.age}
-					isEditPage={this.state.isEditPage}
-					goBack={() => this.props.history.push('/')}
-				/>
-			</Grommet.App>
-		)
-	}
-}
-
-export default FormContainer;
+	}),
+	formEnhancer,
+	withProps(props => ({
+		nameError: pathOr(null, ['errors', 'name'], props),
+		avatarError: pathOr(null, ['errors', 'avatar'], props),
+		jobError: pathOr(null, ['errors', 'job'], props),
+		ageError: pathOr(null, ['errors', 'age'], props),
+		descriptionError: pathOr(null, ['errors', 'description'], props)
+	})),
+	withProps(props => ({
+		hasErrors: !isEmpty(props.errors)
+	}))
+)(BasicForm);

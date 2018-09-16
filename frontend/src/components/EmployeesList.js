@@ -2,38 +2,56 @@ import React from 'react';
 import {
 	Box,
 	Card,
-	Anchor,
-	Columns,
-	Button
+	Button,
+	Image,
+	Title,
+	Label
 } from 'grommet';
 import 'grommet/grommet.min.css';
 import Edit from 'grommet/components/icons/base/Edit';
 import Trash from 'grommet/components/icons/base/Trash';
+import styled from 'styled-components';
 
-
-const EmployeeCard = ({ name, job, id, deleteEmployee }) => (
+const ButtonBox = styled.div`
+width: 100%;
+display: flex;
+justify-content: space-between;
+`
+const EmployeeCard = ({ avatar, job, age, name, description, id, deleteEmployee }) => (
 	<Box
-		pad="small"
-		align="center"
+		pad="medium"
+		align="start"
 	>
-		<Card
-			thumbnail='http://grommet.io/img/carousel-1.png'
-			label={`Name: ${name}`}
-			heading={`Job: ${job}`}
-			description='Decent description for content'
-			link={
-				<div>
-					<Button
-						icon={<Edit />}
-            href={`/edit/${id}`}
-					/>
-					<Button
-						icon={<Trash />}
-						onClick={() => deleteEmployee(id)}
-					/>
-				</div>}
-			/>
+		<Image src={avatar} size="small"/>
+		<Box pad={{vertical: "small"}}>
+			<Label>
+				{name}
+			</Label>
+			<Title>
+				{job}
+			</Title>
 		</Box>
+		<div>
+			<Label>
+				Age: {age}
+			</Label>
+		</div>
+		<div>
+			<Label>
+				{description}
+			</Label>
+		</div>
+		<ButtonBox>
+			<Button
+				icon={<Edit />}
+				href={`/edit/${id}`}
+			/>
+			<Button
+				icon={<Trash />}
+				onClick={() => deleteEmployee(id)}
+			/>
+		</ButtonBox>
+	</Box>
 );
 
 const EmployeesList = ({ employees, deleteEmployeById }) => (
@@ -43,9 +61,8 @@ const EmployeesList = ({ employees, deleteEmployeById }) => (
 				<EmployeeCard
 					key={`${i}_${employee._id}`}
 					id={employee._id}
-					name={employee.name}
-					job={employee.job}
 					deleteEmployee={deleteEmployeById}
+					{...employee}
 				/>)
 			}
 		</Box>

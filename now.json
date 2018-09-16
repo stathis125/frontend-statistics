@@ -1,0 +1,9 @@
+{
+	"alias": "stathistics",
+	"public": true,
+	"build": {
+		"env": {
+			"MONGODB_URI": "@mongodb-uri"
+		}
+	}
+}

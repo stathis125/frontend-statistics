@@ -1,8 +1,8 @@
 const Employee = require('../models/employee');
 
 function getEmployeeById(req, res) {
-  const id = req.params.id;
-  Employee.findById(id)
+  const employeeid = req.params.id;
+  Employee.findById(employeeid)
     .then(employee => {
       if (employee) {
         res.json(employee);

@@ -5,7 +5,9 @@ function putUpdateEmployee(req, res) {
     Employee.findByIdAndUpdate(employeeId, {
         name: req.body.name,
         age: req.body.age,
-        job: req.body.job
+        job: req.body.job,
+        description: req.body.description,
+        avatar: req.body.avatar
     })
         .then(employee => {
             res.json(employee);

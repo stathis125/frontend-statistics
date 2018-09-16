@@ -34,9 +34,13 @@ class Home extends Component {
 	filterEmployees(event) {
 		const query = event.target.value;
 		const filteredEmployees = initialList.filter(employee =>
-			lowerCase(employee.name).includes(lowerCase(query)))
+			lowerCase(employee.name).includes(lowerCase(query)) ||
+			lowerCase(employee.age).includes(lowerCase(query)) ||
+			lowerCase(employee.description).includes(lowerCase(query)) ||
+			lowerCase(employee.job).includes(lowerCase(query))
+		)
 
-		this.setState({employees: filteredEmployees });
+		this.setState({employees: filteredEmployees});
 	}
 	render() {
 		return (
