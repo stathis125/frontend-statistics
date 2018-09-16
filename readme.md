@@ -10,4 +10,4 @@ On another terminal run
 
     code .
 
-On your default browser a tab with url `http://locahost:3000` will open
+On your default browser a tab with url `http://locahost:3001` will open
