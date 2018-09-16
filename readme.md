@@ -23,18 +23,19 @@ A web application for human resources management.
 
 * First you need to clone this project:
 
-sh
+```sh
 git clone git@github.com:stathis125/frontend-statistics.git
+```
 
 * Then you can install and run with:
 
-sh
+```sh
 npm install
 npm start
 
 # for development (hot reload etc...) use the task:
 npm run dev
-
+```
 
 On your default browser a tab with url `http://locahost:3000` will open
 
